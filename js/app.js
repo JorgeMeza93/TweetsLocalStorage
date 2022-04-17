@@ -24,8 +24,11 @@ function agregarTweet(e){
         mensajeError("El tweet debe contener al menos un cáracter");
         return;    //   <--- Este return regresa al punto donde fue llamada la función.
     }
-    console.log(tweet);
-    tweets = [...tweets, tweet];
+    const objTweet = {id: Date.now(), texto: tweet}
+    tweets = [...tweets, objTweet];
+    console.log(tweets);
+    crearHTML();
+    formulario.reset();
 }
 function mensajeError(error){   //Mensaje error recibe por parametro el mensaje
     const mensaje = document.createElement('p');
@@ -33,5 +36,19 @@ function mensajeError(error){   //Mensaje error recibe por parametro el mensaje
     mensaje.classList.add('error');
     divMensaje.appendChild(mensaje);
 }
-
+function crearHTML(){
+    limpiarHTML();
+    if(tweets.length>0){
+        tweets.forEach( (tweet)=>{
+            const li = document.createElement("li");
+            li.innerText = tweet.texto;
+            listaTweets.appendChild(li);
+        });
+    }
+}
+function limpiarHTML(){
+    while(listaTweets.firstChild){
+        listaTweets.removeChild(listaTweets.firstChild);     
+    }
+}
 
