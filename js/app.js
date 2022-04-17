@@ -10,7 +10,11 @@ eventListeners();
 //Oyentes
 function eventListeners(){
     formulario.addEventListener("submit", agregarTweet);
-}
+    document.addEventListener("DOMContentLoaded", ()=>{
+        tweets = JSON.parse(localStorage.getItem("tweets")) || [];
+        crearHTML();
+    });
+}   
 
 
 //Funciones
@@ -25,8 +29,7 @@ function agregarTweet(e){
         return;    //   <--- Este return regresa al punto donde fue llamada la función.
     }
     const objTweet = {id: Date.now(), texto: tweet}
-    tweets = [...tweets, objTweet];
-    console.log(tweets);
+    tweets = [...tweets, objTweet];  
     crearHTML();
     formulario.reset();
 }
@@ -41,14 +44,32 @@ function crearHTML(){
     if(tweets.length>0){
         tweets.forEach( (tweet)=>{
             const li = document.createElement("li");
+            const botonEliminar = document.createElement("a");
+            botonEliminar.classList.add("borrar-tweet");
+            botonEliminar.innerText = "X";
+            botonEliminar.onclick = ()=>{
+                borrarTweet(tweet.id);  
+            }
             li.innerText = tweet.texto;
+            li.appendChild(botonEliminar);
             listaTweets.appendChild(li);
         });
     }
+    sincronizarStorage();
 }
 function limpiarHTML(){
     while(listaTweets.firstChild){
         listaTweets.removeChild(listaTweets.firstChild);     
     }
 }
+function sincronizarStorage(){
+    localStorage.setItem("tweets", JSON.stringify(tweets));
+    console.log(tweets);
+}
+function borrarTweet(id){
+    tweets = tweets.filter( (tweet) => {
+       return tweet.id !== id;
+    });
+    crearHTML();
 
+}
