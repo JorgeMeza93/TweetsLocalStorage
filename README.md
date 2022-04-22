@@ -15,6 +15,7 @@ function eventListeners(){
 
 //Funciones
 function agregarTweet(e){
+
     e.preventDefault();
 }
 
